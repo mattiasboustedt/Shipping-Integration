@@ -1,0 +1,23 @@
+{
+  "id": "83017229-36ac-4e5b-932a-f5fd803535f3",
+  "name": "Shipping Integration",
+  "publisher": "Mattias Boustedt",
+  "brief": "",
+  "description": "",
+  "version": "1.0.0.0",
+  "compatibilityId": "1.0.0.0",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "capabilities": [],
+  "dependencies": [],
+  "screenshots": [],
+  "platform": "11.0.0.0",
+  "application": "11.0.0.0",
+  "idRange": {
+    "from": 58000,
+    "to": 58050
+  }
+}
