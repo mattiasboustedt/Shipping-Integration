@@ -29,6 +29,10 @@ page 58000 "File Creation Log"
                 {
                 }
 
+                field("Json Data"; JsonData)
+                {
+                }
+
                 field("POST:ed"; "POST:ed")
                 {
                 }
@@ -54,27 +58,10 @@ page 58000 "File Creation Log"
                     FileHandler.Run(Rec);
                 end;
             }
-
-            action("Display Json")
-            {
-                Image = ShowSelected;
-
-                trigger OnAction()
-                var
-                    StreamIn: InStream;
-                    JsonText: Text;
-                begin
-                    CalcFields(Rec."Json Data");
-                    if Rec."Json Data".HasValue then begin
-                        Rec."Json Data".CreateInStream(StreamIn);
-                        StreamIn.Read(JsonText);
-                        Message(JsonText);
-                    end;
-                end;
-            }
-
             action("Post Json")
             {
+                Image = LaunchWeb;
+
                 trigger OnAction();
                 var
                     FileHandler: Codeunit "File Handler";
@@ -86,4 +73,29 @@ page 58000 "File Creation Log"
             }
         }
     }
+
+    local procedure SetCalculatedFields();
+    var
+        InStr: InStream;
+        OutgoingText: BigText;
+    begin
+        CalcFields("Json Data");
+        "Json Data".CreateInStream(InStr);
+        OutgoingText.Read(InStr);
+
+        if OutgoingText.Length > 0 then
+            outgoingText.GetSubText(JsonData,1);
+
+        Clear(OutgoingText);
+        Clear(InStr);
+    end;
+
+    trigger OnAfterGetRecord();
+    var
+    begin
+        SetCalculatedFields(); 
+    end;
+
+    var
+        JsonData: Text;
 }
