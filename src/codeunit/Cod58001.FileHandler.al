@@ -69,9 +69,36 @@ codeunit 58001 "File Handler"
         exit;
     end;
 
-    local procedure DoPostRequeset(Data: Record "File Creation Log") Success: Boolean;
+    procedure DoPostRequeset(Data: Record "File Creation Log") ResponseText: Text;
     var
+        Client: HttpClient;
+        Content: HttpContent;
+        ContentHeaders: HttpHeaders;
+        ReqMsg: HttpRequestMessage;
+        RespMsg: HttpResponseMessage;
+        Body: Text;
+        Uri: Text;
+        InStr: InStream;
     begin
+        Data.CalcFields(Data."Json Data");
         
+        if Data."Json Data".HasValue then begin
+            Data."Json Data".CreateInStream(InStr);
+            InStr.Read(Body);
+        end;
+
+        Content.WriteFrom(Body);
+        Content.GetHeaders(ContentHeaders);
+        ContentHeaders.Clear();
+        ContentHeaders.Add('Content-Type', 'application/json');
+        
+        ReqMsg.SetRequestUri('http://requestbin.fullcontact.com/v7s6r6v7'); // Random postbin
+        ReqMsg.Method := 'POST';
+        ReqMsg.Content(Content);
+
+        Client.Send(ReqMsg, RespMsg);
+
+        // Read the response content as json.
+        RespMsg.Content().ReadAs(ResponseText);
     end;
 }

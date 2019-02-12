@@ -72,6 +72,18 @@ page 58000 "File Creation Log"
                     end;
                 end;
             }
+
+            action("Post Json")
+            {
+                trigger OnAction();
+                var
+                    FileHandler: Codeunit "File Handler";
+                    Response: Text;
+                begin
+                    Response := FileHandler.DoPostRequeset(Rec);
+                    Message(Response);
+                end;
+            }
         }
     }
 }
